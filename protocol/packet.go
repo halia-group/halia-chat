@@ -14,16 +14,22 @@ type Packet interface {
 }
 
 const (
-	_              = iota
-	OpPing         = 0x0001
-	OpPong         = 0x0002
-	OpRegisterReq  = 0x0003
-	OpRegisterResp = 0x0004
-	OpLoginReq     = 0x0005
-	OpLoginResp    = 0x0006
-	OpChatReq      = 0x0007
-	OpChatResp     = 0x0008
-	OpChatMessage  = 0x0009
+	_ uint16 = iota
+	OpPing
+	OpPong
+	OpRegisterReq
+	OpRegisterResp
+	OpLoginReq
+	OpLoginResp
+	OpChatReq
+	OpChatResp
+	OpChatMessage
+	OpUnAuthorization
+)
+
+const (
+	_ uint8 = iota
+	MsgText
 )
 
 var (

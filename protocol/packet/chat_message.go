@@ -3,6 +3,7 @@ package packet
 // 接收到聊天消息
 import (
 	"encoding/binary"
+	"fmt"
 	"halia-chat/protocol"
 	"io"
 	"time"
@@ -15,6 +16,10 @@ type ChatMessage struct {
 	MsgType   uint8     // 消息类型
 	Message   string    // 消息内容
 
+}
+
+func (p ChatMessage) String() string {
+	return fmt.Sprintf("ChatMessage{Time=%s,Publisher=%s,MsgType=%d,Message=%s}", p.Time, p.Publisher, p.MsgType, p.Message)
 }
 
 func (ChatMessage) Opcode() uint16 {

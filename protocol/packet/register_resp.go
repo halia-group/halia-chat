@@ -3,6 +3,7 @@ package packet
 // 注册响应
 import (
 	"encoding/binary"
+	"fmt"
 	"halia-chat/protocol"
 	"io"
 )
@@ -11,6 +12,10 @@ type RegisterResp struct {
 	protocol.BasePacket
 	Code    uint8
 	Message string
+}
+
+func (p RegisterResp) String() string {
+	return fmt.Sprintf("RegisterResp{Code=%d,Message=%s}", p.Code, p.Message)
 }
 
 func NewRegisterResp(code uint8, message string) *RegisterResp {

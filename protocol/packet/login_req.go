@@ -2,6 +2,7 @@ package packet
 
 // 登录请求
 import (
+	"fmt"
 	"halia-chat/protocol"
 	"io"
 )
@@ -10,6 +11,10 @@ type LoginReq struct {
 	protocol.BasePacket
 	Username string
 	Password string
+}
+
+func (p LoginReq) String() string {
+	return fmt.Sprintf("LoginReq{Username=%s,Password=%s}", p.Username, p.Password)
 }
 
 func NewLoginReq(username string, password string) *LoginReq {

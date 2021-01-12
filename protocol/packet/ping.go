@@ -6,7 +6,20 @@ import (
 	"io"
 )
 
-type Ping struct{}
+type Ping struct{ protocol.BasePacket }
+
+func (p Ping) String() string {
+	return "Ping{}"
+}
+
+func NewPing() *Ping {
+	return &Ping{
+		BasePacket: protocol.BasePacket{
+			MagicNumber: protocol.MagicNumber,
+			Opcode:      protocol.OpPing,
+		},
+	}
+}
 
 func (p Ping) Opcode() uint16 {
 	return protocol.OpPing

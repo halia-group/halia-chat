@@ -7,5 +7,5 @@ import (
 )
 
 type Processor interface {
-	Process(ctx context.Context, c channel.HandlerContext, packet Packet) error
+	Process(ctx context.Context, c channel.HandlerContext, msg Packet) error
 }

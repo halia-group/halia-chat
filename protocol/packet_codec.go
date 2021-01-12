@@ -40,6 +40,10 @@ func (p PacketDecoder) ChannelRead(c channel.HandlerContext, msg interface{}) {
 
 type PacketEncoder struct{}
 
+func NewPacketEncoder() *PacketEncoder {
+	return &PacketEncoder{}
+}
+
 func (p PacketEncoder) OnError(c channel.HandlerContext, err error) {
 	c.FireOnError(err)
 }

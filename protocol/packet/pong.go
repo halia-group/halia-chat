@@ -6,7 +6,20 @@ import (
 	"io"
 )
 
-type Pong struct{}
+type Pong struct{ protocol.BasePacket }
+
+func (p Pong) String() string {
+	return "Pong{}"
+}
+
+func NewPong() *Pong {
+	return &Pong{
+		BasePacket: protocol.BasePacket{
+			MagicNumber: protocol.MagicNumber,
+			Opcode:      protocol.OpPong,
+		},
+	}
+}
 
 func (p Pong) Opcode() uint16 {
 	return protocol.OpPong

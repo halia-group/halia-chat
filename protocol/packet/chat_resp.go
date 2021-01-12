@@ -3,6 +3,7 @@ package packet
 // 聊天响应
 import (
 	"encoding/binary"
+	"fmt"
 	"halia-chat/protocol"
 	"io"
 )
@@ -11,6 +12,10 @@ type ChatResp struct {
 	protocol.BasePacket
 	Code    uint8
 	Message string
+}
+
+func (p ChatResp) String() string {
+	return fmt.Sprintf("ChatResp{Code=%d,Message=%s}", p.Code, p.Message)
 }
 
 func NewChatResp(code uint8, message string) *ChatResp {

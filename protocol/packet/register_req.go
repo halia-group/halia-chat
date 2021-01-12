@@ -2,6 +2,7 @@ package packet
 
 // 注册请求
 import (
+	"fmt"
 	"halia-chat/protocol"
 	"io"
 )
@@ -10,6 +11,10 @@ type RegisterReq struct {
 	protocol.BasePacket
 	Username string
 	Password string
+}
+
+func (p RegisterReq) String() string {
+	return fmt.Sprintf("RegisterReq{Username=%s,Password=%s}", p.Username, p.Password)
 }
 
 func NewRegisterReq(username string, password string) *RegisterReq {
