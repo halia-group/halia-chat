@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"halia-chat/protocol"
 	"halia-chat/protocol/packet"
+	"halia-chat/server/dao"
 	"net"
 	"sync"
 )
@@ -19,24 +20,29 @@ const (
 
 const (
 	AttrLogged   = "logged"
-	AttrUsername = "username"
+	AttrUserId   = "uid"
+	AttrNickname = "nickname"
 )
 
 type ChatServer struct {
-	channels   []channel.Channel
+	channels   map[int]channel.Channel
 	lock       sync.RWMutex
 	log        *log.Entry
 	server     *bootstrap.Server
 	processors map[uint16]protocol.Processor
 }
 
-func NewServer() *ChatServer {
+func NewServer() (*ChatServer, error) {
 	cs := &ChatServer{
-		channels: make([]channel.Channel, 0),
+		channels: make(map[int]channel.Channel),
 		log:      log.WithField("component", "ChatServer"),
 	}
-	cs.processors = NewProcessors(newDao(), cs)
-	return cs
+	d, err := dao.New()
+	if err != nil {
+		return nil, err
+	}
+	cs.processors = NewProcessors(d, cs)
+	return cs, nil
 }
 func (p *ChatServer) Run(network, addr string) (err error) {
 	options := &bootstrap.ServerOptions{ChannelFactory: func(conn net.Conn) channel.Channel {
@@ -52,36 +58,16 @@ func (p *ChatServer) Run(network, addr string) (err error) {
 	return p.server.Listen(network, addr)
 }
 
-func (p *ChatServer) addChannel(c channel.Channel) {
-	index := p.indexOfChannel(c)
-	if index != -1 {
-		return
-	}
+func (p *ChatServer) addChannel(uid int, c channel.Channel) {
 	p.lock.Lock()
-	p.channels = append(p.channels, c)
+	p.channels[uid] = c
 	p.lock.Unlock()
 }
 
-func (p *ChatServer) removeChannel(c channel.Channel) {
-	index := p.indexOfChannel(c)
-	if index == -1 {
-		return
-	}
+func (p *ChatServer) removeChannel(uid int) {
 	p.lock.Lock()
-	p.channels = append(p.channels[:index], p.channels[index+1:]...)
+	delete(p.channels, uid)
 	p.lock.Unlock()
-}
-
-func (p *ChatServer) indexOfChannel(c channel.Channel) int {
-	var index = -1
-	p.lock.RLock()
-	for i := range p.channels {
-		if p.channels[i] == c {
-			index = i
-		}
-	}
-	p.lock.RUnlock()
-	return index
 }
 
 // 广播消息

@@ -7,23 +7,25 @@ import (
 	log "github.com/sirupsen/logrus"
 	"halia-chat/protocol"
 	"halia-chat/protocol/packet"
+	"halia-chat/server/dao"
 	"time"
 )
 
 type loginProcessor struct {
-	dao    Dao
+	dao    dao.Dao
 	server *ChatServer
 	log    *log.Entry
 }
 
-func NewLoginProcessor(dao Dao, server *ChatServer) *loginProcessor {
+func NewLoginProcessor(dao dao.Dao, server *ChatServer) *loginProcessor {
 	return &loginProcessor{dao: dao, server: server, log: log.WithField("component", "loginProcessor")}
 }
 
 func (p *loginProcessor) Process(ctx context.Context, c channel.HandlerContext, msg protocol.Packet) error {
 	req := msg.(*packet.LoginReq)
 	// 登录失败
-	if err := p.dao.Login(ctx, req.Username, req.Password); err != nil {
+	user, err := p.dao.Login(ctx, req.Username, req.Password)
+	if err != nil {
 		return c.WriteAndFlush(packet.NewLoginResp(1, err.Error()))
 	}
 	// 登录成功
@@ -33,9 +35,10 @@ func (p *loginProcessor) Process(ctx context.Context, c channel.HandlerContext, 
 	}
 	// 设置channel状态
 	c.Channel().SetAttribute(AttrLogged, true)
-	c.Channel().SetAttribute(AttrUsername, req.Username)
+	c.Channel().SetAttribute(AttrUserId, user.ID)
+	c.Channel().SetAttribute(AttrNickname, user.Nickname)
 	// 添加channel到server
-	p.server.addChannel(c.Channel())
+	p.server.addChannel(user.ID, c.Channel())
 	// 广播登录消息
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()

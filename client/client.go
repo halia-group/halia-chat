@@ -30,7 +30,6 @@ func (p *ChatClient) Dial(network, addr string) error {
 		c := channel.NewDefaultChannel(conn)
 		c.Pipeline().AddInbound("frameDecoder", codec.NewLengthFieldBasedFrameDecoder(2, 4, binary.BigEndian))
 		c.Pipeline().AddInbound("packetDecoder", protocol.NewPacketDecoder(packet.Factory))
-		// todo: 传入UI句柄
 
 		c.Pipeline().AddInbound("handler", newHandler(p))
 		c.Pipeline().AddOutbound("packetEncoder", protocol.NewPacketEncoder())

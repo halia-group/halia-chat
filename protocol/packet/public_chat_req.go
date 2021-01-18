@@ -9,32 +9,32 @@ import (
 	"io"
 )
 
-type ChatReq struct {
+type PublicChatReq struct {
 	protocol.BasePacket
 	MsgType uint8  // 消息类型
 	Message string // 消息内容
 }
 
-func (p ChatReq) String() string {
-	return fmt.Sprintf("ChatReq{MsgType=%d,Message=%s}", p.MsgType, p.Message)
+func (p PublicChatReq) String() string {
+	return fmt.Sprintf("PublicChatReq{MsgType=%d,Message=%s}", p.MsgType, p.Message)
 }
 
-func NewChatReq(msgType uint8, message string) *ChatReq {
-	return &ChatReq{
+func NewChatReq(msgType uint8, message string) *PublicChatReq {
+	return &PublicChatReq{
 		BasePacket: protocol.BasePacket{
 			MagicNumber: protocol.MagicNumber,
-			Opcode:      protocol.OpChatReq,
+			Opcode:      protocol.OpPublicChatReq,
 		},
 		MsgType: msgType,
 		Message: message,
 	}
 }
 
-func (p *ChatReq) Opcode() uint16 {
-	return protocol.OpChatReq
+func (p *PublicChatReq) Opcode() uint16 {
+	return protocol.OpPublicChatReq
 }
 
-func (p *ChatReq) Write(w io.Writer) (err error) {
+func (p *PublicChatReq) Write(w io.Writer) (err error) {
 	if err = binary.Write(w, binary.BigEndian, &p.MsgType); err != nil {
 		return
 	}
@@ -44,7 +44,7 @@ func (p *ChatReq) Write(w io.Writer) (err error) {
 	return
 }
 
-func (p *ChatReq) Read(r io.Reader) (err error) {
+func (p *PublicChatReq) Read(r io.Reader) (err error) {
 	if err = binary.Read(r, binary.BigEndian, &p.MsgType); err != nil {
 		return
 	}

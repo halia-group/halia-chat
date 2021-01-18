@@ -9,24 +9,23 @@ import (
 	"time"
 )
 
-type ChatMessage struct {
+type PublicChatMessage struct {
 	protocol.BasePacket
 	Time      time.Time // 发布时间
 	Publisher string    // 发布者
 	MsgType   uint8     // 消息类型
 	Message   string    // 消息内容
-
 }
 
-func (p ChatMessage) String() string {
-	return fmt.Sprintf("ChatMessage{Time=%s,Publisher=%s,MsgType=%d,Message=%s}", p.Time, p.Publisher, p.MsgType, p.Message)
+func (p PublicChatMessage) String() string {
+	return fmt.Sprintf("PublicChatMessage{Time=%s,Publisher=%s,MsgType=%d,Message=%s}", p.Time, p.Publisher, p.MsgType, p.Message)
 }
 
-func (ChatMessage) Opcode() uint16 {
-	return protocol.OpChatMessage
+func (PublicChatMessage) Opcode() uint16 {
+	return protocol.OpPublicMessage
 }
 
-func (p *ChatMessage) Write(w io.Writer) (err error) {
+func (p *PublicChatMessage) Write(w io.Writer) (err error) {
 	var (
 		timestamp = p.Time.Unix()
 	)
@@ -45,7 +44,7 @@ func (p *ChatMessage) Write(w io.Writer) (err error) {
 	return
 }
 
-func (p *ChatMessage) Read(r io.Reader) (err error) {
+func (p *PublicChatMessage) Read(r io.Reader) (err error) {
 	var (
 		timestamp int64
 	)
@@ -65,11 +64,11 @@ func (p *ChatMessage) Read(r io.Reader) (err error) {
 	return
 }
 
-func NewChatMessage(time time.Time, publisher string, msgType uint8, message string) *ChatMessage {
-	return &ChatMessage{
+func NewChatMessage(time time.Time, publisher string, msgType uint8, message string) *PublicChatMessage {
+	return &PublicChatMessage{
 		BasePacket: protocol.BasePacket{
 			MagicNumber: protocol.MagicNumber,
-			Opcode:      protocol.OpChatMessage,
+			Opcode:      protocol.OpPublicMessage,
 		},
 		Time:      time,
 		Publisher: publisher,

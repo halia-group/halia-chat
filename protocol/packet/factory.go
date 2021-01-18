@@ -22,13 +22,13 @@ var Factory = map[uint16]func() protocol.Packet{
 	protocol.OpLoginResp: func() protocol.Packet {
 		return new(LoginResp)
 	},
-	protocol.OpChatReq: func() protocol.Packet {
-		return new(ChatReq)
+	protocol.OpPublicChatReq: func() protocol.Packet {
+		return new(PublicChatReq)
 	},
-	protocol.OpChatResp: func() protocol.Packet {
-		return new(ChatResp)
+	protocol.OpPublicChatResp: func() protocol.Packet {
+		return new(PublicChatResp)
 	},
-	protocol.OpChatMessage: func() protocol.Packet {
-		return new(ChatMessage)
+	protocol.OpPublicMessage: func() protocol.Packet {
+		return new(PublicChatMessage)
 	},
 }

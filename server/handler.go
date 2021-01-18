@@ -29,15 +29,15 @@ func (p *handler) ChannelActive(c channel.HandlerContext) {
 
 func (p *handler) ChannelInActive(c channel.HandlerContext) {
 	p.log.WithField("peer", c.Channel().RemoteAddr()).Debugln("disconnected")
-
-	p.server.removeChannel(c.Channel())
 	// 广播离开消息
-	if !c.Channel().HasAttribute(AttrUsername) {
+	if !c.Channel().HasAttribute(AttrUserId) {
 		return
 	}
+	p.server.removeChannel(c.Channel().GetAttribute(AttrUserId).(int))
+
 	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*5)
 	defer cancel()
-	msg := fmt.Sprintf("<%s>已离开", c.Channel().GetStringAttribute(AttrUsername))
+	msg := fmt.Sprintf("<%s>已离开", c.Channel().GetStringAttribute(AttrNickname))
 	loginMsg := packet.NewChatMessage(time.Now(), SystemUsername, protocol.MsgText, msg)
 	p.server.broadcast(ctx, loginMsg)
 }

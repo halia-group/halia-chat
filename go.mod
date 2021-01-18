@@ -5,5 +5,6 @@ go 1.15
 require (
 	github.com/halia-group/halia v0.1.3
 	github.com/sirupsen/logrus v1.7.0
-	github.com/therecipe/qt v0.0.0-20200904063919-c0c124a5770d
+	gorm.io/driver/mysql v1.0.3
+	gorm.io/gorm v1.20.11
 )
