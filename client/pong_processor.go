@@ -3,17 +3,16 @@ package client
 import (
 	"context"
 	"github.com/halia-group/halia/channel"
-	"github.com/halia-group/halia/examples/chat/common"
 	"halia-chat/protocol"
+	"halia-chat/protocol/packet"
 )
 
-// todo UI句柄
 type pongProcessor struct {
 	cc *ChatClient
 }
 
 func (p pongProcessor) Process(ctx context.Context, c channel.HandlerContext, msg protocol.Packet) error {
-	return c.WriteAndFlush(common.NewRegisterReq("xialei", "111111"))
+	return c.WriteAndFlush(packet.NewRegisterReq("xialei", "111111", "夏磊"))
 }
 
 func newPongProcessor(cc *ChatClient) *pongProcessor {

@@ -11,13 +11,14 @@ type RegisterReq struct {
 	protocol.BasePacket
 	Username string
 	Password string
+	Nickname string
 }
 
 func (p RegisterReq) String() string {
-	return fmt.Sprintf("RegisterReq{Username=%s,Password=%s}", p.Username, p.Password)
+	return fmt.Sprintf("RegisterReq{Username=%s,Password=%s,Nickname=%s}", p.Username, p.Password, p.Nickname)
 }
 
-func NewRegisterReq(username string, password string) *RegisterReq {
+func NewRegisterReq(username, password, nickname string) *RegisterReq {
 	return &RegisterReq{
 		BasePacket: protocol.BasePacket{
 			MagicNumber: protocol.MagicNumber,
@@ -25,6 +26,7 @@ func NewRegisterReq(username string, password string) *RegisterReq {
 		},
 		Username: username,
 		Password: password,
+		Nickname: nickname,
 	}
 }
 
@@ -39,6 +41,9 @@ func (p *RegisterReq) Write(w io.Writer) (err error) {
 	if err = p.WriteString(w, p.Password); err != nil {
 		return
 	}
+	if err = p.WriteString(w, p.Nickname); err != nil {
+		return
+	}
 	return
 }
 
@@ -47,6 +52,9 @@ func (p *RegisterReq) Read(r io.Reader) (err error) {
 		return
 	}
 	if p.Password, err = p.ReadString(r); err != nil {
+		return
+	}
+	if p.Nickname, err = p.ReadString(r); err != nil {
 		return
 	}
 	return

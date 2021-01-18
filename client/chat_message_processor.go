@@ -13,7 +13,7 @@ type chatMessageProcessor struct {
 }
 
 func (p chatMessageProcessor) Process(ctx context.Context, c channel.HandlerContext, msg protocol.Packet) error {
-	resp := msg.(*packet.ChatMessage)
+	resp := msg.(*packet.PublicChatMessage)
 	fmt.Printf("%s <%s>: %s\n", resp.Time.String(), resp.Publisher, resp.Message)
 	return nil
 }

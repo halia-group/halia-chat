@@ -21,10 +21,10 @@ const (
 	OpRegisterResp
 	OpLoginReq
 	OpLoginResp
-	OpChatReq
-	OpChatResp
-	OpChatMessage
-	OpUnAuthorization
+	OpPublicChatReq   // 公共聊天请求
+	OpPublicChatResp  // 公共聊天响应
+	OpPublicMessage   // 收到公共消息
+	OpUnAuthorization // 未登录
 )
 
 const (

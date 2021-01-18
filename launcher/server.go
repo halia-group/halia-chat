@@ -20,6 +20,9 @@ func init() {
 func main() {
 	flag.Parse()
 
-	cs := server.NewServer()
+	cs, err := server.NewServer()
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Fatal(cs.Run("tcp", addr))
 }

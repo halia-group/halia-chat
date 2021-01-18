@@ -12,6 +12,24 @@
 
 ## 运行
 
+### 数据库SQL
+
+```sql
+create table user
+(
+    id         int auto_increment primary key,
+    username   varchar(20) not null comment '账号',
+    password   varchar(20) not null comment '密码',
+    nickname   varchar(20) not null,
+    created_at timestamp   not null,
+    updated_at timestamp   null,
+    constraint user_username_uindex unique (username)
+);
+```
+
+### 运行程序
+> server/dao/dao.db.go中修改数据库连接字符串
+
 `launcher`目录下依次运行`server`,`client`即可
 
 服务端输出

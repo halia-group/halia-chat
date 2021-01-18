@@ -8,32 +8,32 @@ import (
 	"io"
 )
 
-type ChatResp struct {
+type PublicChatResp struct {
 	protocol.BasePacket
 	Code    uint8
 	Message string
 }
 
-func (p ChatResp) String() string {
-	return fmt.Sprintf("ChatResp{Code=%d,Message=%s}", p.Code, p.Message)
+func (p PublicChatResp) String() string {
+	return fmt.Sprintf("PublicChatResp{Code=%d,Message=%s}", p.Code, p.Message)
 }
 
-func NewChatResp(code uint8, message string) *ChatResp {
-	return &ChatResp{
+func NewChatResp(code uint8, message string) *PublicChatResp {
+	return &PublicChatResp{
 		BasePacket: protocol.BasePacket{
 			MagicNumber: protocol.MagicNumber,
-			Opcode:      protocol.OpChatResp,
+			Opcode:      protocol.OpPublicChatResp,
 		},
 		Code:    code,
 		Message: message,
 	}
 }
 
-func (ChatResp) Opcode() uint16 {
-	return protocol.OpChatResp
+func (PublicChatResp) Opcode() uint16 {
+	return protocol.OpPublicChatResp
 }
 
-func (p *ChatResp) Write(w io.Writer) (err error) {
+func (p *PublicChatResp) Write(w io.Writer) (err error) {
 	if err = binary.Write(w, binary.BigEndian, &p.Code); err != nil {
 		return
 	}
@@ -43,7 +43,7 @@ func (p *ChatResp) Write(w io.Writer) (err error) {
 	return
 }
 
-func (p *ChatResp) Read(r io.Reader) (err error) {
+func (p *PublicChatResp) Read(r io.Reader) (err error) {
 	if err = binary.Read(r, binary.BigEndian, &p.Code); err != nil {
 		return
 	}

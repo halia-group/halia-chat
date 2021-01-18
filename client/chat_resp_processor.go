@@ -13,7 +13,7 @@ type chatRespProcessor struct {
 }
 
 func (p chatRespProcessor) Process(ctx context.Context, c channel.HandlerContext, msg protocol.Packet) error {
-	resp := msg.(*packet.ChatResp)
+	resp := msg.(*packet.PublicChatResp)
 	if resp.Code != 0 {
 		log.WithField("component", "chatProcessor").Warnln(resp.Message)
 		return nil
