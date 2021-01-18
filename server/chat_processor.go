@@ -18,6 +18,7 @@ func (p chatProcessor) Process(ctx context.Context, c channel.HandlerContext, ms
 	if !c.Channel().GetBoolAttribute(AttrLogged) {
 		return c.WriteAndFlush(packet.NewUnAuthorization())
 	}
+	c.WriteAndFlush(packet.NewChatResp(0, "ok"))
 
 	req := msg.(*packet.PublicChatReq)
 	nickname := c.Channel().GetStringAttribute(AttrNickname)
